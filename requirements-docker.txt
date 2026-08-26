@@ -1,0 +1,14 @@
+# Para mantener la estrategia comercial y producción, y teniendo en cuenta que en el archivo requirements.txt
+# Contamos con librerias generales que es para la lectura y reproducibilidad de TODO EL PROYECTO
+# Se decide por practicidad crear un nuevo .txt solo con las dependencias y librerias que necesita el contenedor Docker 
+# Para correr con armonia el modelo.
+
+# Dependencias de la API
+fastapi==0.141.1
+uvicorn==0.52.4
+
+# Dependencias para cargar y ejecutar el modelo .pkl
+joblib==1.5.3
+numpy==2.5.2
+pandas==3.0.5
+scikit-learn==1.9.0
