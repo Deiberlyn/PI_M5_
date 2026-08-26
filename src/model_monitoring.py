@@ -16,7 +16,10 @@ import seaborn as sns
 from sklearn.model_selection import train_test_split
 
 # Metodos Generados en pipelines anteriores (cargar_datos)
-from cargar_datos import cargarDatos
+try:
+    from src.cargar_datos import cargarDatos
+except ModuleNotFoundError:
+    from cargar_datos import cargarDatos
 
 # Definición de métricas para Data Drift
 def calcular_psi(reference, current, num_bins=10):
@@ -131,10 +134,22 @@ def evaluar_drift_dataset(df_ref, df_new, alpha=0.05):
 
     return pd.DataFrame(resultados)
 
+# Se nos permitio acceder a un nuevo DataSet simulado para comprobar si hay Data Drift
+# Se reemplazaran algunas lineas de codigo con este nuevo DataSet para revisar si las métricas previamente generan
+# Alertas o si el sistema aun visualiza que todos los datos estan estables.
+
 if __name__ == "__main__":
     print("🕵️ VERIFICACIÓN DE DATA DRIFT")
-    df = cargarDatos()
-    df_ref, df_new = train_test_split(df, test_size=0.2, random_state=42)
+
+    # DataSet original
+    df_ref = cargarDatos()
+
+    # DataSet simulado para Data Drift
+    df_new = pd.read_excel('Base_de_datos_con_Data_Drift_Simulado.xlsx')
+
+    # Evualamos si hay Data Drift
     reporte = evaluar_drift_dataset(df_ref, df_new)
+
+    print("\n--------------------- REPORTE DE DATA DRIFT ---------------------")
     print(reporte)
     print("✅ Validación de existencia de Data Drift realizado con exito!")

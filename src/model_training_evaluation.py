@@ -195,6 +195,10 @@ def ejecutar_pipeline_entrenador():
     X_train_proc = pipeline_prep.fit_transform(X_train)
     X_test_proc = pipeline_prep.transform(X_test)
 
+    # Confirmación visual de las dimensiones reales en consola
+    print(f"\n[INFO] Matriz procesada de Entrenamiento (31 cols esperadas): {X_train_proc.shape}")
+    print(f"[INFO] Matriz procesada de Prueba: {X_test_proc.shape}")
+
     # !!! Aplicando Undersampling ÚNICAMENTE a los datos de entrenamiento (X_train_proc, y_train)
     rus = RandomUnderSampler(sampling_strategy=0.5, random_state=42) 
 

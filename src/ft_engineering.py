@@ -173,7 +173,9 @@ def construir_pipeline_preprocesamiento(cat_ord_cols=['tendencia_ingresos'], ord
     1. Limpieza de negocio (reglas EDA)
     2. Creación de Ratios Financieros
     3. Preprocesamiento dinámico (Imputación + Encoders + Scaler)
-    """        
+    """       
+
+    print(" Preprocesamiento realizado con exito ✅") 
     return Pipeline(steps=[
         ('limpieza_inicial', LimpiadorPersonalizado()),
         ('ratios_financieros', GeneradorRatiosFinancieros()),

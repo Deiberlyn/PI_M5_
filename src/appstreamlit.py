@@ -16,15 +16,6 @@ from cargar_datos import cargarDatos
 from model_monitoring import evaluar_drift_dataset
 
 #####################################################################
-###### PRUEBA PIPELINE MODEL_MONITORIND ANTES DE CORRER LA APP ######
-#####################################################################
-if __name__ == "__main__":
-    df = cargarDatos()
-    df_ref, df_new = train_test_split(df, test_size=0.2, random_state=42)
-    reporte = evaluar_drift_dataset(df_ref, df_new)
-    print(reporte)
-
-#####################################################################
 ################ Producción y gestión de Streamlit ##################
 #####################################################################
 
@@ -42,8 +33,8 @@ st.markdown("Evaluación continua de la distribución de datos crudos (Históric
 # 2. ------------ Carga de Datos
 @st.cache_data
 def obtener_datos():
-    df = cargarDatos()
-    df_ref, df_new = train_test_split(df, test_size=0.2, random_state=42)
+    df_ref = cargarDatos()
+    df_new = pd.read_excel('Base_de_datos_con_Data_Drift_Simulado.xlsx')
     return df_ref, df_new
 
 df_ref, df_new = obtener_datos()
