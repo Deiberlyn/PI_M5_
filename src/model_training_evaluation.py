@@ -20,8 +20,12 @@ from sklearn.linear_model import LogisticRegression
 from imblearn.under_sampling import RandomUnderSampler # Para realizar Undersampler
 
 # Importar el pipeline de Feature Engineering
-from src.cargar_datos import cargarDatos
-from src.ft_engineering import construir_pipeline_preprocesamiento
+try:
+    from src.cargar_datos import cargarDatos
+    from src.ft_engineering import construir_pipeline_preprocesamiento
+except ModuleNotFoundError:
+    from cargar_datos import cargarDatos
+    from ft_engineering import construir_pipeline_preprocesamiento
 
 # 1. Construyendo el modelo
 def build_model(model_name, **kwargs):
@@ -222,6 +226,19 @@ def ejecutar_pipeline_entrenador():
     print(df_resumen.to_string())
     
     graficar_comparativa(df_resumen)
+
+    # -------------------------- SELECCIÓN DEL MEJOR MODELO --------------------------
+
+    # Para importar/extraer el mejor modelo
+    import joblib
+    
+    # Exportar el modelo ganador seleccionado (ExtraTrees)
+    modelo_ganador = modelos_entrenados['ExtraTrees']
+
+    # Guardando tanto el modelo como el pipeline de preprocesamiento
+    joblib.dump(modelo_ganador, 'src/modelo_ganador.pkl')
+    joblib.dump(pipeline_prep, 'src/construir_pipeline_preprocesamiento.pkl')
+    print("\n[ÉXITO] Modelo ExtraTrees y Pipeline exportados correctamente en 'src/'")
     
     return df_resumen, modelos_entrenados
 
@@ -234,3 +251,4 @@ if __name__ == "__main__":
 # financieros calculados y la optimización de umbrales en la clase minoritaria
 # Pasamos de detectar solo un 7.8% de los morosos a un 62.7% en Regresión Logística y un 58.8% en Random Forest.
 # Logrando un modelo genuinamente útil para la mitigación del riesgo en producción.
+# 🏆 Modelo Ganador según métricas y profundidad: ExtraTrees.
