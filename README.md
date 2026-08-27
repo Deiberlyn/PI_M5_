@@ -10,6 +10,35 @@ Aplicaqueremos y ejecutaremos pipelines automatizados desde la carga de datos, h
 
 ------------------------------------------------------------------------------------------------------------------------------
 
+### Estructura del Proyecto (Árbol de Carpetas)
+
+PI_M5_/
+├── 📁 images/
+│   ├── comparativa_modelos.png                      # Imagenes de soporte del proyecto
+│   └── ...
+├── 📁 mlops_pipeline/
+│   └── 📁 src/
+│       ├── appstreamlit.py                          # Script Streamlit (evaluación de Data Drift)
+│       ├── cargar_datos.py                          # Iniciación Base de Datos
+│       ├── comprension_eda.ipynb                    # Analisis de la Base de Datos
+│       ├── construir_pipeline_preprocesamiento.pkl  # Pipeline preprocesamiento para levantamiento de FastAPI en formato .pkl
+│       ├── ft_engineering.py                        # Limpieza de los datos crudos orientado enm los hallazgos del EDA
+│       ├── model_deploy.py                          # Script de levantamiento de FastAPI y contenedor Docker
+│       ├── model_monitoring.py                      # Script enlazado con appstreamlit para la evaluación de posible Data Drift
+│       ├── model_training_evaluation.py             # Script de entrenamiento de modelos
+│       └── modelo_ganador.pkl                       # Pipeline modelo seleccionado para FastAPI en formato .pkl
+├── 📄 .dockerignore                                     # Script de soporte para Docker
+├── 📄 .gitignore
+├── 📄 Base_de_datos.xlsx (o .csv)                       # Base de datos principal/original
+├── 📄 Base_de_datos_con_Data_Drift_Simulado.xlsx        # Base de datos simulada para Data Drift (fines educativos)
+├── 📄 Dockerfile                                        # Archivo base con la información base para el contenedor de Docker
+├── 📄 LICENSE
+├── 📄 README.md                                         # README del proyecto (resumen, ruta, etc)
+├── 📄 requirements-docker.txt                           # Librerias y dependendias *unicamente Docker*
+└── 📄 requirements.txt                                  # Librerias y dependencias de todo el proyecto.
+
+------------------------------------------------------------------------------------------------------------------------------
+
 ### 💡 Preguntas de Negocio e Insights Clave realizadas durante el EDA
 Durante la fase de análisis exploratorio de datos (EDA), se abordaron interrogantes estratégicas para entender los factores determinantes del comportamiento financiero de los clientes:
 
@@ -76,39 +105,11 @@ El DataSet cuenta con un total de 23 columnas/variables y 10,763 registros.
 * **tendencia_ingresos:** Indicador cualitativo sobre el comportamiento temporal de los ingresos (ej. Creciente, Estable, Decreciente).
 * **Pago_atiempo:** **Variable Objetivo (Target)**. Indica el cumplimiento puntual del plan de pagos (`1` = Pago oportuno, `0` = Incumplimiento o mora).
 
-###3 📋 Caracterización y Estado Actual de los Datos (10,763 Registros)
-
-| Columna | Tipo en Python | Naturaleza Teórica | Estado / Observación |
-| :--- | :--- | :--- | :--- |
-| **tipo_credito** | `int64` | Categórica (Nominal) | Viene codificada numéricamente. |
-| **fecha_prestamo** | `datetime64[us]` | Temporal | Correctamente casteada como fecha. |
-| **capital_prestado** | `float64` | Numérica (Continua) | Completa (sin nulos). |
-| **plazo_meses** | `int64` | Numérica (Discreta) | Completa (sin nulos). |
-| **edad_cliente** | `int64` | Numérica (Discreta) | Completa (sin nulos). |
-| **tipo_laboral** | `str` | Categórica (Nominal) | Tipo texto/cadena. |
-| **salario_cliente** | `int64` | Numérica (Continua) | Completa (sin nulos). |
-| **total_otros_prestamos**| `int64` | Numérica (Continua) | Completa (sin nulos). |
-| **cuota_pactada** | `int64` | Numérica (Continua) | Completa (sin nulos). |
-| **puntaje** | `float64` | Numérica (Continua) | Score interno completo. |
-| **puntaje_datacredito** | `float64` | Numérica (Continua) | Contiene 6 nulos. |
-| **cant_creditosvigentes**| `int64` | Numérica (Discreta) | Completa (sin nulos). |
-| **huella_consulta** | `int64` | Numérica (Discreta) | Completa (sin nulos). |
-| **saldo_mora** | `float64` | Numérica (Continua) | Contiene 156 nulos. |
-| **saldo_total** | `float64` | Numérica (Continua) | Contiene 156 nulos. |
-| **saldo_principal** | `float64` | Numérica (Continua) | Contiene 405 nulos. |
-| **saldo_mora_codeudor** | `float64` | Numérica (Continua) | Contiene 590 nulos. |
-| **creditos_sectorFinanciero** | `int64` | Numérica (Discreta) | Completa (sin nulos). |
-| **creditos_sectorCooperativo** | `int64` | Numérica (Discreta) | Completa (sin nulos). |
-| **creditos_sectorReal**| `int64` | Numérica (Discreta) | Completa (sin nulos). |
-| **promedio_ingresos_datacredito** | `float64` | Numérica (Continua) | **Crítica:** Presenta 2,930 nulos (~27%). |
-| **tendencia_ingresos** | `object` | Categórica (Ordinal) | **Crítica:** Presenta 2,932 nulos (~27%). |
-| **Pago_atiempo** | `int64` | Categórica (Dicotómica) | **Variable Objetivo (Target)**. |
-
-![Distribución faltantes de valores por columnas](images/Grafica%20-%20Columnas%20con%20valores%20faltantes.png)
-
 #### 🧹 Limpieza y Tratamiento de Datos
 
 Durante la inspección estadística se identificaron y corrigieron las siguientes anomalías principales para la gestión de las gráficas:
+
+![Distribución faltantes de valores por columnas](images/Grafica%20-%20Columnas%20con%20valores%20faltantes.png)
 
 * **Edades incoherentes (`edad_cliente`):** Filtrado de valores atípicos (máximo detectado de 123 años).
 * **Scores negativos (`puntaje` / `datacredito`):** Conversión de valores negativos a `NaN` por ser códigos de error del sistema.
@@ -145,14 +146,20 @@ pip install -r requirements.txt
 jupyter notebook notebooks/comprension_eda.ipynb
 
 # 4. Gestión de Pipelines
-python -m cargar_datos
-python -m ft_engineering
-python -m model_training_evaluation
-python -m model_deploy
+python mlops_pipeline/src/cargar_datos.py
+python mlops_pipeline/src/ft_engineering.py
+python mlops_pipeline/src/model_training_evaluation.py
+python mlops_pipeline/src/model_deploy.py
+
+# 4.1 Creación y ejecución de la imagen Docker
+docker build -t api-riesgo .
+docker run -d -p 8000:8000 --name contenedor-api api-riesgo
+# Acceso a la documentación interactiva de la API en el navegador:
+# http://localhost:8000/doc
 
 # 5. Gestión de aplicaciones para Data Drift (streamlit)
-python -m model_monitoring
-python -m appstreamlit
+python mlops_pipeline/src/model_monitoring.py
+streamlit run mlops_pipeline/src/appstreamlit.py
 
 -------------------------------------------------------------------------------------------------------------------------
 
@@ -286,5 +293,3 @@ Herramienta analítica y de visualización interactiva construida con **Streamli
 
 * **Creación de carpetas:** Se genera la carpeta `images`, donde se comparten las graficas más relevantes del EDA y el estudio de los modelos entrenados.
 * **Bases de datos:** Para este proyecto se utilzó la Base_de_datos.xlsx como base para todos los script y entrenamientos de los modelos. Con excepción de `model_monitoring.py`, script (con fines educativos) enfocado para visualizar si contamos con Data Drift (actualización de datos), lo que determina si un modelo debe de ser reentrenado o no.
-
---------------------------------------------------------------------------------------------------------------------------

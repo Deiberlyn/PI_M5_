@@ -13,4 +13,4 @@ COPY . .
 EXPOSE 8000
 
 # Comando para ejecutar la API
-CMD ["uvicorn", "src.model_deploy:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "mlops_pipeline.src.model_deploy:app", "--host", "0.0.0.0", "--port", "8000"]
