@@ -43,7 +43,7 @@ Durante la fase de análisis exploratorio de datos (EDA), se abordaron interroga
 #### 1. ¿Qué variables demográficas y financieras son los mejores predictores del comportamiento de pago?
 * **Puntaje en Datacrédito y Scoring Interno:** Demostraron una correlación alta con la puntualidad del pago, permitiendo segmentar perfiles de alto y bajo riesgo.
 
-![Matriz de Correlación y Variables Clave](images/Matriz%20de%20correlación.png)
+![Matriz de Correlación y Variables Clave](images/Matriz%20de%20Correlación.png)
 
 * **Relación Ingresos vs. Cuota (Capacidad de Pago):** Los clientes cuyo nivel de cuota compromete más del umbral crítico de su salario presentan una mayor variabilidad en sus fechas de cumplimiento.
 
