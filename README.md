@@ -13,29 +13,28 @@ Aplicaqueremos y ejecutaremos pipelines automatizados desde la carga de datos, h
 ### Estructura del Proyecto (Árbol de Carpetas)
 
 PI_M5_/
-├── 📁 images/
-│   ├── comparativa_modelos.png                      # Imagenes de soporte del proyecto
-│   └── ...
-├── 📁 mlops_pipeline/
-│   └── 📁 src/
-│       ├── appstreamlit.py                          # Script Streamlit (evaluación de Data Drift)
-│       ├── cargar_datos.py                          # Iniciación Base de Datos
-│       ├── comprension_eda.ipynb                    # Analisis de la Base de Datos
-│       ├── construir_pipeline_preprocesamiento.pkl  # Pipeline preprocesamiento para levantamiento de FastAPI en formato .pkl
-│       ├── ft_engineering.py                        # Limpieza de los datos crudos orientado enm los hallazgos del EDA
-│       ├── model_deploy.py                          # Script de levantamiento de FastAPI y contenedor Docker
-│       ├── model_monitoring.py                      # Script enlazado con appstreamlit para la evaluación de posible Data Drift
-│       ├── model_training_evaluation.py             # Script de entrenamiento de modelos
-│       └── modelo_ganador.pkl                       # Pipeline modelo seleccionado para FastAPI en formato .pkl
-├── 📄 .dockerignore                                     # Script de soporte para Docker
-├── 📄 .gitignore
-├── 📄 Base_de_datos.xlsx (o .csv)                       # Base de datos principal/original
-├── 📄 Base_de_datos_con_Data_Drift_Simulado.xlsx        # Base de datos simulada para Data Drift (fines educativos)
-├── 📄 Dockerfile                                        # Archivo base con la información base para el contenedor de Docker
-├── 📄 LICENSE
-├── 📄 README.md                                         # README del proyecto (resumen, ruta, etc)
-├── 📄 requirements-docker.txt                           # Librerias y dependendias *unicamente Docker*
-└── 📄 requirements.txt                                  # Librerias y dependencias de todo el proyecto.
+├── images/
+│   └── comparativa_modelos.png          # Imágenes de soporte del proyecto
+├── mlops_pipeline/
+│   └── src/
+│       └── appstreamlit.py                            # Script Streamlit (Data Drift)
+|         ├── cargar_datos.py                          # Script de carga de datos
+|          ├── construir_pipeline_preprocesamiento.pkl # Pipeline serializado
+|          ├── ft_engineering.py                       # Ingeniería de características
+|          ├── model_deploy.py                         # Script de despliegue FastAPI
+|          ├── model_monitoring.py                     # Monitoreo de métricas
+|          ├── model_training_evaluation.py            # Entrenamiento y evaluación
+|          ├── modelo_ganador.pkl                      # Modelo optimizado serializado
+
+├── .dockerignore                        # Configuración para ignorar en Docker
+├── .gitignore                           # Configuración para ignorar en Git
+├── Base_de_datos.xlsx                   # Base de datos principal
+├── Base_de_datos_con_Data_Drift_Simulado.xlsx # Base simulada para pruebas
+├── Dockerfile                           # Configuración del contenedor Docker
+├── LICENSE                              # Licencia del proyecto
+├── README.md                            # Documentación principal
+├── requirements-docker.txt              # Dependencias exclusivas de Docker
+└── requirements.txt                     # Dependencias generales del proyecto
 
 ------------------------------------------------------------------------------------------------------------------------------
 
@@ -160,7 +159,7 @@ docker run -d -p 8000:8000 --name contenedor-api api-riesgo
 # 5. Gestión de aplicaciones para Data Drift (streamlit)
 python mlops_pipeline/src/model_monitoring.py
 streamlit run mlops_pipeline/src/appstreamlit.py
-
+```
 -------------------------------------------------------------------------------------------------------------------------
 
 ### 🛠️ Pipeline de Cargar Datos (`cargar_datos.py`)
