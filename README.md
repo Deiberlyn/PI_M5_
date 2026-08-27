@@ -10,32 +10,31 @@ Aplicaqueremos y ejecutaremos pipelines automatizados desde la carga de datos, h
 
 ------------------------------------------------------------------------------------------------------------------------------
 
-### Estructura del Proyecto (Árbol de Carpetas)
-
+### 📁 Estructura del Proyecto (Árbol de Carpetas)
+```text
 PI_M5_/
-├── images/
+├── 📁images/
 │   └── comparativa_modelos.png          # Imágenes de soporte del proyecto
-├── mlops_pipeline/
+├── 🗂️mlops_pipeline/
 │   └── src/
-│       └── appstreamlit.py                            # Script Streamlit (Data Drift)
-|         ├── cargar_datos.py                          # Script de carga de datos
-|          ├── construir_pipeline_preprocesamiento.pkl # Pipeline serializado
-|          ├── ft_engineering.py                       # Ingeniería de características
-|          ├── model_deploy.py                         # Script de despliegue FastAPI
-|          ├── model_monitoring.py                     # Monitoreo de métricas
-|          ├── model_training_evaluation.py            # Entrenamiento y evaluación
-|          ├── modelo_ganador.pkl                      # Modelo optimizado serializado
-
-├── .dockerignore                        # Configuración para ignorar en Docker
-├── .gitignore                           # Configuración para ignorar en Git
-├── Base_de_datos.xlsx                   # Base de datos principal
-├── Base_de_datos_con_Data_Drift_Simulado.xlsx # Base simulada para pruebas
-├── Dockerfile                           # Configuración del contenedor Docker
-├── LICENSE                              # Licencia del proyecto
-├── README.md                            # Documentación principal
-├── requirements-docker.txt              # Dependencias exclusivas de Docker
-└── requirements.txt                     # Dependencias generales del proyecto
-
+│       ├── appstreamlit.py              # Script Streamlit (Data Drift)
+│       ├── cargar_datos.py              # Script de carga de datos
+│       ├── construir_pipeline_preprocesamiento.pkl # Pipeline serializado
+│       ├── ft_engineering.py            # Ingeniería de características
+│       ├── model_deploy.py              # Script de despliegue FastAPI
+│       ├── model_monitoring.py          # Monitoreo de métricas
+│       ├── model_training_evaluation.py # Entrenamiento y evaluación
+│       └── modelo_ganador.pkl           # Modelo optimizado serializado
+├── 📄.dockerignore                         # Configuración para ignorar en Docker
+├── 📄.gitignore                            # Configuración para ignorar en Git
+├── 🟩Base_de_datos.xlsx                    # Base de datos principal
+├── 🟩Base_de_datos_con_Data_Drift_Simulado.xlsx # Base simulada para pruebas
+├── 📦Dockerfile                            # Configuración del contenedor Docker
+├── 🪪LICENSE                               # Licencia del proyecto
+├── 📒README.md                             # Documentación principal
+├── 📄requirements-docker.txt               # Dependencias exclusivas de Docker
+└── 📄requirements.txt                      # Dependencias generales del proyecto
+```
 ------------------------------------------------------------------------------------------------------------------------------
 
 ### 💡 Preguntas de Negocio e Insights Clave realizadas durante el EDA
