@@ -2,6 +2,7 @@
 import time
 import numpy as np
 import pandas as pd
+from pathlib import Path
 import matplotlib
 matplotlib.use('Agg')  # Genera la imagen sin intentar abrir ventana Tkinter
 import matplotlib.pyplot as plt
@@ -236,8 +237,9 @@ def ejecutar_pipeline_entrenador():
     modelo_ganador = modelos_entrenados['ExtraTrees']
 
     # Guardando tanto el modelo como el pipeline de preprocesamiento
-    joblib.dump(modelo_ganador, 'src/modelo_ganador.pkl')
-    joblib.dump(pipeline_prep, 'src/construir_pipeline_preprocesamiento.pkl')
+    DIR_ACTUAL = Path(__file__).resolve().parent
+    joblib.dump(modelo_ganador, DIR_ACTUAL / 'modelo_ganador.pkl')
+    joblib.dump(pipeline_prep, DIR_ACTUAL / 'construir_pipeline_preprocesamiento.pkl')
     print("\n[ÉXITO] Modelo ExtraTrees y Pipeline exportados correctamente en 'src/'")
     
     return df_resumen, modelos_entrenados

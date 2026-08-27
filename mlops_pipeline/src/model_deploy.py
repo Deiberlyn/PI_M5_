@@ -1,5 +1,6 @@
 # Librerias base para manejo de los DataSet
 import pandas as pd
+from pathlib import Path
 
 # Libreria para levantamiento del modelo y APIs
 import joblib
@@ -21,8 +22,12 @@ try:
 
 except Exception:
     # Ajuste por si se ejecuta desde dentro del contenedor Docker, o no entiende la ruta
-    modelo = joblib.load("modelo_ganador.pkl")
-    pipeline = joblib.load("construir_pipeline_preprocesamiento.pkl")
+    DIR_ACTUAL = Path(__file__).resolve().parent
+    try:
+        modelo = joblib.load(DIR_ACTUAL / "modelo_ganador.pkl")
+        pipeline = joblib.load(DIR_ACTUAL / "construir_pipeline_preprocesamiento.pkl")
+    except Exception as e:
+        print(f"Error al cargar los artefactos: {e}")
 
 @app.get("/")
 def home():

@@ -11,7 +11,10 @@ from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder, StandardScaler
 from sklearn.utils.validation import check_is_fitted
 
 # Importar la función de cargarDatos donde ya tenemos el DataSet
-from src.cargar_datos import cargarDatos
+try:
+    from src.cargar_datos import cargarDatos
+except ModuleNotFoundError:
+    from cargar_datos import cargarDatos
 
 # Se realizan cambios en el pipeline de preprocesamiento.
 # Ya que anteriormente tenia errores en el script, estando "hardcodeado", lo que impedia 
