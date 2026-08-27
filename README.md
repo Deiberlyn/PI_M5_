@@ -1,14 +1,45 @@
-## MODULO 5 - PROYECTO INTEGRADOR (PI)
-Este proyecto desarrolla e implementa una solución integral de Machine Learning orientada a la evaluación de riesgo crediticio y predicción de mora/cumplimiento de pagos. Incluye desde la exploración de datos hasta el despliegue de una arquitectura de monitoreo continuo de **Data Drift** en producción.
+## MODULO 5 - PROYECTO INTEGRADOR (PI): Sistema MLOps de Riesgo Crediticio
 
-### 📊 Sistema Integrado de Scoring de Crédito, Producción y Monitoreo de Modelos (MLOps)
-**Contexto del Proyecto**
-Rol: científico de Datos Junior Advanced.
-Objetivo: el equipo de Datos y Analítica de la entidad financiera tiene la responsabilidad principal en este proyecto de gestionar, desarrollar, evaluar y desplegar un modelo de aprendizaje automático (Machine Learning) para la evaluación de posibles clientes "morosos", o que presenten un *riesgo crediticio* para la compañia. El modelo deberá contener evaluaciones constantes para revisar funcionalidad de los datos (No Data Drift), y toda su arquitectura automazida a través de pipelines, aplicaciones/interfaces como Streamlit, reproducibilidad en cualquier dispositivos a través de empaquetados realizados en Docker, aprovechando los serviicios de grande sinstancias como AWS, Google Cloud, etc.
+Solución integral de Machine Learning orientada a la evaluación automatizada de riesgo crediticio, scoring y predicción de incumplimiento de pagos. El proyecto cubre el ciclo completo de MLOps: desde la exploración y limpieza avanzada de datos, ingeniería de características, entrenamiento y selección de modelos, hasta el despliegue en producción mediante **FastAPI**, contenedores **Docker** y una interfaz de monitoreo continuo de **Data Drift** con **Streamlit**.
 
-Este modelo utilizará información histórica sobre la colocación y comportamiento de créditos con el fin de anticiparse al riesgo operativo y predecir la probabilidad de pago oportuno de nuevos solicitantes. A, su vez de realizará un monitoreo simulado de Data Drift.
+#### 📊 **Contexto del Proyecto**
+* **Rol:** Junior Advanced Data Scientist.
+* **Objetivo de Negocio:** Desarrollar, evaluar y desplegar un modelo predictivo capaz de anticiparse al riesgo de impago (*morosidad*) de nuevos solicitantes de crédito, automatizando la toma de decisiones y garantizando la robustez operativa a través del monitoreo continuo de datos.
 
-### 💡 Preguntas de Negocio e Insights Clave (EDA)
+Aplicaqueremos y ejecutaremos pipelines automatizados desde la carga de datos, hasta la producción en tiempo real de las predicciones del modelo, a través de aplicaciones/URL como Streamlit, FastAPI y Docker.
+
+------------------------------------------------------------------------------------------------------------------------------
+
+### Estructura del Proyecto (Árbol de Carpetas)
+
+PI_M5_/
+├── 📁 images/
+│   ├── comparativa_modelos.png                      # Imagenes de soporte del proyecto
+│   └── ...
+├── 📁 mlops_pipeline/
+│   └── 📁 src/
+│       ├── appstreamlit.py                          # Script Streamlit (evaluación de Data Drift)
+│       ├── cargar_datos.py                          # Iniciación Base de Datos
+│       ├── comprension_eda.ipynb                    # Analisis de la Base de Datos
+│       ├── construir_pipeline_preprocesamiento.pkl  # Pipeline preprocesamiento para levantamiento de FastAPI en formato .pkl
+│       ├── ft_engineering.py                        # Limpieza de los datos crudos orientado enm los hallazgos del EDA
+│       ├── model_deploy.py                          # Script de levantamiento de FastAPI y contenedor Docker
+│       ├── model_monitoring.py                      # Script enlazado con appstreamlit para la evaluación de posible Data Drift
+│       ├── model_training_evaluation.py             # Script de entrenamiento de modelos
+│       └── modelo_ganador.pkl                       # Pipeline modelo seleccionado para FastAPI en formato .pkl
+├── 📄 .dockerignore                                     # Script de soporte para Docker
+├── 📄 .gitignore
+├── 📄 Base_de_datos.xlsx (o .csv)                       # Base de datos principal/original
+├── 📄 Base_de_datos_con_Data_Drift_Simulado.xlsx        # Base de datos simulada para Data Drift (fines educativos)
+├── 📄 Dockerfile                                        # Archivo base con la información base para el contenedor de Docker
+├── 📄 LICENSE
+├── 📄 README.md                                         # README del proyecto (resumen, ruta, etc)
+├── 📄 requirements-docker.txt                           # Librerias y dependendias *unicamente Docker*
+└── 📄 requirements.txt                                  # Librerias y dependencias de todo el proyecto.
+
+------------------------------------------------------------------------------------------------------------------------------
+
+### 💡 Preguntas de Negocio e Insights Clave realizadas durante el EDA
 Durante la fase de análisis exploratorio de datos (EDA), se abordaron interrogantes estratégicas para entender los factores determinantes del comportamiento financiero de los clientes:
 
 #### 1. ¿Qué variables demográficas y financieras son los mejores predictores del comportamiento de pago?
@@ -30,14 +61,27 @@ Durante la fase de análisis exploratorio de datos (EDA), se abordaron interroga
 
 ![Gráfica de Monitoreo de Modelos](images/comparativa_modelos.png)
 
+### 💵 Recomendaciones de Negocio
+
+* **1. Políticas de Aprobación Diferenciadas por Estabilidad Laboral:** Dado que los trabajadores independientes cuentan con tendencias de ingresos decrecientes y presentan una tasa de mora aproximada de 7.34%, se sugiere implementar bandas de tasas de interés ajustadas al riesgo o requerir codeudores para este segmento específico.
+
+* **2. Monitoreo Dinámico de la Capacidad de Pago:** Se sugiere establecer alertas automáticas cuando la cuota pactada supere por cierto porcentaje (ésto debe de ser pautado por la entidad financiera) el umbral del salario del solicitante, evitando sobreendeudamiento incluso si el puntaje en centrales de riesgo es favorable. También visualizar si cuenta con otros creditos en diferentes entidades y el estado de pago de éstas (si es posible).
+
+* **3. Estrategias de Cobranza Preventiva:** Se sugiere utilizar las probabilidades continuas devueltas por el modelo (probabilidad_buen_pagador o probabilidad_moroso) para identificar clientes en la zona gris, o cerca de sus cortes de pago y desplegar campañas de educación financiera, alertas de cortes o reestructuración antes de que caigan en mora formal.
+
+* **4. Gobierno de Datos y Actualización del Modelo:** Automatizar el pipeline de detección de Data Drift integrado en Streamlit para que sirva como gatillo (trigger) operativo que avise al equipo de analítica cuándo es momento de reentrenar el modelo con datos recientes, evitando la degradación del rendimiento por cambios macroeconómicos. A su vez, visualizar si nuevos datos recaudados pueden ser de utilidad para el modelo. Datos tales como "fecha de ultimo pago" (para visualizar si por una situación externa u fuera del control del cliente lo hace caer como "moroso", por ejemplo, un accidente, etc). 
+
+* **5. Contacto constante y fluido:** Afianzar relaciones entre cliente-entidad financiera, con campañas con entidades comerciales de intereses, generando ofertas atractivas, con mayor recompensa para los clientes que hacen pagos puntuales.
+
+* **6. Datos mas precisos y practicos para el entrenamiento:** Se sugiere datos de mayor peso y relación a los clientes concentrados en la entidad financiera, como, por ejemplo, cuantos servicios tienen con la entidad, cuantos creditos solicitados puede tener un mismo cliente, cuantos han sido pagados a tiempo, cuales son "empresas", "microempresas", "coperativas", trazabilidad de pago (desde cuando se catalogó "moroso" un cliente, o desde cuando ya no realiza el pago), estado migratorio/legal del cliente, entre otros.
+
 -------------------------------------------------------------------------------------------------------------------------
 
-**Diccionario y Caracterización de Datos en nuestro DataSet**
-A continuación se detalla la estructura inicial de las 23 variables disponibles en el dataset para el Análisis Exploratorio de Datos (EDA):
+### Construcción EDA (Analisis Exploratorio de los Datos)
+El DataSet cuenta con un total de 23 columnas/variables y 10,763 registros.
 
-### 📖 Diccionario de Variables del Dataset
-
-* **tipo_credito:** Código numérico que identifica la modalidad o destino del préstamo otorgado.
+#### 📖 Diccionario de Variables del Dataset
+* **tipo_credito:** Código numérico que identifica la modalidad, tipo o destino del préstamo otorgado.
 * **fecha_prestamo:** Marca temporal (fecha y hora) en la que se desembolsó el crédito.
 * **capital_prestado:** Monto principal de dinero otorgado al cliente en el préstamo.
 * **plazo_meses:** Tiempo total pactado en meses para la devolución completa de la deuda.
@@ -61,39 +105,11 @@ A continuación se detalla la estructura inicial de las 23 variables disponibles
 * **tendencia_ingresos:** Indicador cualitativo sobre el comportamiento temporal de los ingresos (ej. Creciente, Estable, Decreciente).
 * **Pago_atiempo:** **Variable Objetivo (Target)**. Indica el cumplimiento puntual del plan de pagos (`1` = Pago oportuno, `0` = Incumplimiento o mora).
 
-### 📋 Caracterización y Estado Actual de los Datos (10,763 Registros)
+#### 🧹 Limpieza y Tratamiento de Datos
 
-| Columna | Tipo en Python | Naturaleza Teórica | Estado / Observación |
-| :--- | :--- | :--- | :--- |
-| **tipo_credito** | `int64` | Categórica (Nominal) | Viene codificada numéricamente. |
-| **fecha_prestamo** | `datetime64[us]` | Temporal | Correctamente casteada como fecha. |
-| **capital_prestado** | `float64` | Numérica (Continua) | Completa (sin nulos). |
-| **plazo_meses** | `int64` | Numérica (Discreta) | Completa (sin nulos). |
-| **edad_cliente** | `int64` | Numérica (Discreta) | Completa (sin nulos). |
-| **tipo_laboral** | `str` | Categórica (Nominal) | Tipo texto/cadena. |
-| **salario_cliente** | `int64` | Numérica (Continua) | Completa (sin nulos). |
-| **total_otros_prestamos**| `int64` | Numérica (Continua) | Completa (sin nulos). |
-| **cuota_pactada** | `int64` | Numérica (Continua) | Completa (sin nulos). |
-| **puntaje** | `float64` | Numérica (Continua) | Score interno completo. |
-| **puntaje_datacredito** | `float64` | Numérica (Continua) | Contiene 6 nulos. |
-| **cant_creditosvigentes**| `int64` | Numérica (Discreta) | Completa (sin nulos). |
-| **huella_consulta** | `int64` | Numérica (Discreta) | Completa (sin nulos). |
-| **saldo_mora** | `float64` | Numérica (Continua) | Contiene 156 nulos. |
-| **saldo_total** | `float64` | Numérica (Continua) | Contiene 156 nulos. |
-| **saldo_principal** | `float64` | Numérica (Continua) | Contiene 405 nulos. |
-| **saldo_mora_codeudor** | `float64` | Numérica (Continua) | Contiene 590 nulos. |
-| **creditos_sectorFinanciero** | `int64` | Numérica (Discreta) | Completa (sin nulos). |
-| **creditos_sectorCooperativo** | `int64` | Numérica (Discreta) | Completa (sin nulos). |
-| **creditos_sectorReal**| `int64` | Numérica (Discreta) | Completa (sin nulos). |
-| **promedio_ingresos_datacredito** | `float64` | Numérica (Continua) | **Crítica:** Presenta 2,930 nulos (~27%). |
-| **tendencia_ingresos** | `object` | Categórica (Ordinal) | **Crítica:** Presenta 2,932 nulos (~27%). |
-| **Pago_atiempo** | `int64` | Categórica (Dicotómica) | **Variable Objetivo (Target)**. |
+Durante la inspección estadística se identificaron y corrigieron las siguientes anomalías principales para la gestión de las gráficas:
 
 ![Distribución faltantes de valores por columnas](images/Grafica%20-%20Columnas%20con%20valores%20faltantes.png)
-
-### 🧹 Limpieza y Tratamiento de Datos (información resumida) (EDA)
-
-Durante la inspección estadística se identificaron y corrigieron las siguientes anomalías principales:
 
 * **Edades incoherentes (`edad_cliente`):** Filtrado de valores atípicos (máximo detectado de 123 años).
 * **Scores negativos (`puntaje` / `datacredito`):** Conversión de valores negativos a `NaN` por ser códigos de error del sistema.
@@ -101,12 +117,49 @@ Durante la inspección estadística se identificaron y corrigieron las siguiente
 * **Asimetría en mora (`saldo_mora`):** Ajuste por alta concentración de ceros (75% sin mora activa).
 * **NO SE ENCONTRARON VALORES DUPLICADOS, POR LO QUE NO SE INTREGA EN LA LIMPIEZA DE PREPROCESAMIENTO (PIPELINE)** *
 
-### 🎯 CONCLUSIÓN EDA
+### | 🎯 CONCLUSIÓN EDA | 
 
-#### 📊 Estado del Dataset y Target (`Pago_atiempo`)
-* **Desbalance Severo:** 95.25% cumplidos (`1`) vs. 4.75% en mora (`0`). Requiere rebalanceo (`class_weight='balanced'`, SMOTE) y evaluación enfocada en **PR-AUC, Recall y F1-Score**.
-* **Predictores Clave:** Alta correlación con `puntaje` interno ($r = 0.79$), `puntaje_datacredito` y `edad_cliente`.
-* **Segmento de Mayor Riesgo:** Independientes con tendencia de ingresos decreciente (7.34% de mora).
+#### | 📊 Estado del Dataset y Target (`Pago_atiempo`) |
+* | **Desbalance Severo:** 95.25% cumplidos (`1`) vs. 4.75% en mora (`0`). Requiere rebalanceo (`class_weight='balanced'`, SMOTE) y evaluación enfocada en **PR-AUC, Recall y F1-Score**. |
+* | **Predictores Clave:** Alta correlación con `puntaje` interno ($r = 0.79$), `puntaje_datacredito` y `edad_cliente`. |
+* | **Segmento de Mayor Riesgo:** Independientes con tendencia de ingresos decreciente (7.34% de mora). |
+
+-------------------------------------------------------------------------------------------------------------------------
+
+## 🚀 Guía de Ejecución Local
+
+```bash
+# 1. Clonar el repositorio
+git clone <https://github.com/Deiberlyn/PI_M5_.git>
+cd PI_M5_
+
+# 2. Crear entorno virtual 
+python -m venv venv
+
+# 2.1 Activar entorno virtual (En Windows) 
+venv\Scripts\activate
+
+# 3. Instalar dependencias
+pip install -r requirements.txt
+
+# 3.1 Ejecución o revisión del Análisis Exploratorio de Datos (EDA)
+jupyter notebook notebooks/comprension_eda.ipynb
+
+# 4. Gestión de Pipelines
+python mlops_pipeline/src/cargar_datos.py
+python mlops_pipeline/src/ft_engineering.py
+python mlops_pipeline/src/model_training_evaluation.py
+python mlops_pipeline/src/model_deploy.py
+
+# 4.1 Creación y ejecución de la imagen Docker
+docker build -t api-riesgo .
+docker run -d -p 8000:8000 --name contenedor-api api-riesgo
+# Acceso a la documentación interactiva de la API en el navegador:
+# http://localhost:8000/doc
+
+# 5. Gestión de aplicaciones para Data Drift (streamlit)
+python mlops_pipeline/src/model_monitoring.py
+streamlit run mlops_pipeline/src/appstreamlit.py
 
 -------------------------------------------------------------------------------------------------------------------------
 
@@ -194,10 +247,49 @@ Si bien la Regresión Logística presenta métricas lineales competitivas, se ha
 
 --------------------------------------------------------------------------------------------------------------------------
 
+### ✅ Pipeline de Automatización y Despliegue - predicción en tiempo real (`model_deploy.py`)
+
+#### 🚨Endpoint desarrollado con **FastAPI** para automatizar el scoring crediticio y la evaluación de riesgo de clientes de forma individual o por lotes (*batch*).
+
+### Características Principales
+
+* **Arquitectura del Endpoint (`/predict`):** Recibe datos de entrada en formato JSON (`List[Dict[str, Any]]`), los procesa mediante un `DataFrame` de Pandas y aplica el pipeline de preprocesamiento serializado.
+* **Prevención de Data Leakage:** Elimina de manera estricta columnas sensibles o filtradas antes de la transformación (`puntaje`, `fecha_prestamo`, `cant_creditosvigentes`, `saldo_principal` y `Pago_atiempo`).
+* **Modelo Predictivo:** Carga artefactos entrenados (`modelo_ganador.pkl` y pipeline de preprocesamiento `construir_pipeline_preprocesamiento.pkl` ) con soporte para ejecución local y contenedores Docker.
+* **Umbral de Decisión Personalizado:** Evalúa la probabilidad de buen pagador utilizando un umbral de decisión ajustado en `0.6553` para clasificar las solicitudes en **Aprobado** o **Rechazado** según fue entrenado el modelo en model_training_evaluation.py.
+* **Salida Estructurada:** Retorna un JSON con el ID del registro, la probabilidad calculada a 4 decimales, la clase binaria y la etiqueta descriptiva del crédito. Mateniendo un mensaje claro entre clientes que son calificados como "morosos" o clientes que si son considerados "buenos pagadores".
 
 
+#### Docker Container - Generación de Imagen e ID
 
+* **Practicidad y Organización:** Se realiza la creación del archivo base "Dockerfile con la información necesaria para la creación del contenedor del modelo y el script de nuestra API, manteniendo como puerto (localhost) 8000, según el estandar de la industria.
+* **Prevención de Carga de Datos Innecesarios:** Se crea un script .txt (`requirements-docker.txt`).únicamente para Docker, ya que este contiene las librerias para el modelo y pipeline de preprocesamiento. Se evita cargar el archivo general requirements.txt, debido a qué éste contiene TODAS las librerias del proyecto, información NO necesaria para Docker correr el modelo.
+* **Definición de Parámetros:** Como se espera en la instrustria, se crea el archivo .dockerignore, con el fin de evitar cargar dentro del contenedor datos u archivos residuales de Python al momento de entrenar, crear y automatizar modelos de Machine Learning, información que no necesita Docker para correr el script y realizar predicciones con el modelo.
 
+--------------------------------------------------------------------------------------------------------------------------
 
+### 🗂️ Pipelines de desarrollos del proyecto (`model_monitoring.py | appstreamlit.py` )
 
+### Módulo de Monitoreo y Detección de Data Drift (`appstreamlit.py`)
 
+Herramienta analítica y de visualización interactiva construida con **Streamlit** y pruebas estadísticas para evaluar continuamente cambios en las distribuciones de los datos entre el entorno histórico (referencia) y nuevos lotes de datos simulados (`Base_de_datos_con_Data_Drift_Simulado.xlsx`). El script se completo junto con el pipeline `model_monitoring.py`
+
+### Características Principales (`model_monitoring`)
+
+* **Monitoreo Estadístico Automatizado:** 
+  * Emplea la prueba **Kolmogorov-Smirnov (KS)** y el **Population Stability Index (PSI)** para evaluar variables numéricas.
+  * Utiliza la prueba de independencia **Chi-cuadrado** para variables categóricas.
+* **Sistema de Semáforos y Alertas:** Clasifica automáticamente cada variable evaluada en estados de **ESTABLE**, **ADVERTENCIA** o **CRÍTICO** en función de los umbrales de desviación calculados (`alpha=0.05`, `PSI >= 0.2`).
+* **Dashboard Interactivo en Streamlit:**
+  * Métricas globales en tiempo real con tarjetas de resumen (*Total de variables monitoreadas*, *Variables estables* y *Variables críticas*).
+  * Tabla de reporte estilizada mediante formato condicional.
+  * Gráficas comparativas de distribución dinámicas (histogramas superpuestos para variables numéricas y barras agrupadas para categóricas vía Plotly).
+* **Análisis Temporal:** Evalúa la evolución y el volumen de registros a lo largo del tiempo utilizando la columna `fecha_prestamo`.
+* **Recomendaciones Inteligentes:** Genera alertas automáticas sugiriendo acciones de reentrenamiento (*retraining*) en caso de detectar anomalías críticas de *Data Drift*.
+
+--------------------------------------------------------------------------------------------------------------------------
+
+### Otros Documentos/Archivos de soporte para el proyecto
+
+* **Creación de carpetas:** Se genera la carpeta `images`, donde se comparten las graficas más relevantes del EDA y el estudio de los modelos entrenados.
+* **Bases de datos:** Para este proyecto se utilzó la Base_de_datos.xlsx como base para todos los script y entrenamientos de los modelos. Con excepción de `model_monitoring.py`, script (con fines educativos) enfocado para visualizar si contamos con Data Drift (actualización de datos), lo que determina si un modelo debe de ser reentrenado o no.
